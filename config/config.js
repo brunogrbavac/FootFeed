@@ -1,5 +1,4 @@
-//MI: ovaj file ucitavamo u index.js file u models folderu koji učitava sve postavke seqelizea 
-
+//ovaj file koristi sequelize za postavke
 const envRequired=require("dotenv").config(); //dohvaćamo .env datoteku pomoću dotenv paketa koji ju čita
 
 if (envRequired.error) {
