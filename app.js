@@ -7,9 +7,9 @@ const app = express();
 async function start(){
     try{
         await loaders.load(app);
-        app.listen(config.port, ()=>{ nodeLogger.info(`Server is listening on port ${config.port} `)});
+        app.listen(config.port, ()=>{ nodeLogger.error(`Server is listening on port ${config.port} `)});
     }catch(error){
-        nodeLogger.error(error);
+        nodeLogger.info(error);
     };
 };
 
