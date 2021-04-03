@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Competition.init({
-    AF_ID_competition: DataTypes.BIGINT,
+    AF_ID_competition: { //u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
+      type: DataTypes.BIGINT,
+      primaryKey: true,
+    },
     name: DataTypes.STRING,
     logo: DataTypes.STRING,
     country: DataTypes.STRING

@@ -3,9 +3,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Player', { //ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu
       AF_ID_player: { //sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
+        primaryKey: true,
         type: Sequelize.BIGINT,//ručno sve minjato
         allowNull: false,
-        primaryKey: true,
       },
       name: {
         type: Sequelize.STRING

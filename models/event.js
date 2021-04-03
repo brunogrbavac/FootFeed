@@ -16,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Event.init({
-    event_id: DataTypes.BIGINT,
+    event_id: { //u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
+      type: DataTypes.BIGINT,
+      primaryKey: true,
+    },
     type: DataTypes.STRING,
     time: DataTypes.STRING,
     match_id: DataTypes.BIGINT
