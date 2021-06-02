@@ -1,9 +1,9 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Team', { //ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu 
-      AF_ID_team: { //sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
-        primaryKey: true, //ručno sve minjato
+    await queryInterface.createTable('Team', { // ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu 
+      AF_ID_team: { // sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
+        primaryKey: true, // ručno sve minjato
         allowNull: false,
         type: Sequelize.BIGINT
       },
@@ -16,14 +16,6 @@ module.exports = {
       coach: {
         type: Sequelize.STRING
       },
-      // createdAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE
-      // },
-      // updatedAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE
-      // }
     });
   },
   down: async (queryInterface, Sequelize) => {

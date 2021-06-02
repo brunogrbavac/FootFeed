@@ -1,4 +1,5 @@
 const winston = require('winston'); 
+const morgan = require('morgan');
 const { Console } = require('winston/lib/winston/transports');
 
 winston.loggers.add('nodeLogger',{
@@ -25,8 +26,22 @@ winston.loggers.add('nodeLogger',{
     ]
 });
 
-const logger=winston.loggers.get('nodeLogger');
+const logger = winston.loggers.get('nodeLogger');
+
+
+const http = morgan('dev',{   //format ispisa
+    stream: {
+        write(msg){
+            logger.info(msg.substr(0, msg.lastIndexOf('\n')));//trazimo zadnji /n koji je dodan da izbjegnemo prazni red kod stvarnog ispisa-> substr uzme prvi član sve do indeksa zadnje pojave \n -> njega ne uzme i ne dobijemo prazni red
+            /* inace bi dobili ovakav ispis
+            info: GET / 302 17.303 ms - 68-> ovaj broj oznacava Content-length,broj nakon rute=status
+            info: GET /login 304 4.429 ms - -
+            info: GET /ok 304 2.691 ms - -*/
+        }
+    }
+});
 
 module.exports={
-    nodeLogger:logger
-}
+    nodeLogger: logger,
+    httpLogger: http,
+};

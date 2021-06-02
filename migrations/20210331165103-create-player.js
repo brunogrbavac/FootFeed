@@ -1,10 +1,10 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Player', { //ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu
-      AF_ID_player: { //sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
+    await queryInterface.createTable('Player', { // ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu
+      AF_ID_player: { // sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
         primaryKey: true,
-        type: Sequelize.BIGINT,//ručno sve minjato
+        type: Sequelize.BIGINT,// ručno sve minjato
         allowNull: false,
       },
       name: {
@@ -16,17 +16,12 @@ module.exports = {
       number: {
         type: Sequelize.INTEGER
       },
-      // createdAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE
-      // },
-      // updatedAt: {
-      //   allowNull: false,
-      //   type: Sequelize.DATE
-      // }
+      photo: {
+        type: Sequelize.STRING
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Player'); //ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu
+    await queryInterface.dropTable('Player'); // ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu
   }
 };

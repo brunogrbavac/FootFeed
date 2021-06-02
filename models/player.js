@@ -1,36 +1,34 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+
+const {Model} = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
+
   class Player extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
-      this.belongsToMany(models.Team,{through:'player_team',foreignKey:'AF_ID_player',as:'players_team'}); //objašnjeno u team modelu
+      this.belongsToMany(models.Team,{through:'player_team',foreignKey:'AF_ID_player',as:'players_team'}); // objašnjeno u team modelu
       this.belongsToMany(models.Event,{through:'player_event',foreignKey:'AF_ID_player',as:'players_event'}); // -||-
     }
   };
+
   Player.init({
-    AF_ID_player: { //u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
+    AF_ID_player: { // u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
       type:DataTypes.BIGINT,
       primaryKey:true
     },
     name: DataTypes.STRING,
     surname: DataTypes.STRING,
-    number: DataTypes.INTEGER
+    number: DataTypes.INTEGER,
+    photo: DataTypes.STRING
   }, {
     sequelize,
-    timestamps: false, //ručno dodato jer ne želimo dodatne stupce
-    createdAt: false, //ručno dodato jer ne želimo dodatne stupce
-    updatedAt: false, //ručno dodato jer ne želimo dodatne stupce
+    timestamps: false, // ručno dodato jer ne želimo dodatne stupce
+    createdAt: false, // -||-
+    updatedAt: false, // -||-
     modelName: 'Player',
-    freezeTableName: true, //ručno dodato jer ne želimo da minja ime tablice
+    freezeTableName: true, // -||-
 
   });
+
   return Player;
 };
