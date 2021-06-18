@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import offlineReducer from './offline';
-import darkModeReducer from './darkMode'
+import darkModeReducer from './darkMode';
+import loginReducer from './login';
+import galleryReducer from './gallery';
 
 const universalReducer = combineReducers({
-    offline: offlineReducer,
     darkMode: darkModeReducer,
+    login: loginReducer,
+    gallery: galleryReducer,
 });
 
 export default universalReducer;

@@ -7,15 +7,32 @@ import { Menu as MenuIcon, Search, AccountCircle, WbSunnyOutlined, NightsStayOut
 import logo from '../../images/footfeed.png';
 import logoIcon from '../../images/footfeedIcon.png';
 import { lightModeOn, darkModeOn } from '../../redux/actions/darkMode';
+import { userLogOut } from '../../redux/actions/login';
+import { Link } from 'react-router-dom';
 
 
 export default function Navbar(props) {
   const dispatch = useDispatch();
   const darkMode = useSelector( (store) => store.darkMode );
-  const [anchor, setAnchor] = useState(null);
+  const login = useSelector( (store) => store.login );
+  const [ anchor, setAnchor] = useState(null);
   const accountMenuOpen = Boolean(anchor);
   const smallScreen = (window.innerWidth < 1200);
-  const drawerWidth = smallScreen ? 240 : 360;
+  const drawerWidth = smallScreen ? 300 : 360;
+
+  const HTTPlogout = () => {
+
+    const requestOptions = {
+      method: 'HEAD',
+      mode:'cors',
+      headers: { 'Content-Type': 'application/json'},
+      credentials: 'include'
+    };
+
+    fetch(`http://localhost:3001/log/out`, requestOptions)
+    .then((response)=> dispatch(userLogOut()))
+    .catch( (error) => { console.log('Error in fetch function '+ error);});
+  };
 
   const profileMenuOpen = (event) => {
     setAnchor(event.currentTarget);
@@ -30,6 +47,8 @@ export default function Navbar(props) {
       flexGrow: 1, // svima rast ujednjačen -> inače nered
     },
     navbar: {
+      left:0,
+      width:"100vw",
       transition: theme.transitions.create(['margin', 'width'], { // tranzicija dijeluje na margine i širinu
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -67,7 +86,7 @@ export default function Navbar(props) {
       },
       marginRight: theme.spacing(2),
       marginLeft: theme.spacing(3),
-      width: '100%',
+      width: 'auto',
       [theme.breakpoints.up('sm')]: {
         width: 'auto',
       },
@@ -125,24 +144,26 @@ export default function Navbar(props) {
               <IconButton edge="start" disabled={props.openDrawer} className={clsx(classes.menuButton)}  color="inherit" onClick={()=>props.handleOpenDrawer()}> {/*anulira padding od parrenta - da nan je lipo uz rub livi*/} 
                   <MenuIcon/>
               </IconButton>
-              <img className={classes.logo}  src={logo}  alt="FootFeed"/> {/*ovo je kada je width > 600px*/}
-              <img className={classes.logoIcon}  src={logoIcon}  alt="FootFeed"/> {/*mala slika zamanje od 600px*/}
+              <Link to='/'> <img className={classes.logo}  src={logo}  alt="FootFeed" /> {/*ovo je kada je width > 600px*/} </Link>
+              <Link to='/'> <img className={classes.logoIcon}  src={logoIcon}  alt="FootFeed"/> {/*mala slika zamanje od 600px*/} </Link>
               <div style={{flexGrow: 1}} /> {/*trik za odvojit livo i desno grupe */}
               <Tooltip title="Search league, team or article" arrow>
                   <div className={classes.searchBox}>
                       <div className={classes.searchIcon}>
                           <Search/>
                       </div>
-                      <InputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} classes={{root: classes.inputRoot, input: classes.inputInput,}} />
+                      <InputBase placeholder="Search…" aria-label='search' classes={{root: classes.inputRoot, input: classes.inputInput,}} />
                   </div>
               </Tooltip>
-              <Tooltip title="Your unseen notifications" arrow>
-                <IconButton aria-label="show 17 new notifications" color="inherit">
-                    <Badge badgeContent={17} color="secondary">
-                        <Notifications/>
-                    </Badge>
-                </IconButton>
-              </Tooltip>
+              {(login !== null) && 
+                  <Tooltip title="Your unseen notifications" arrow>
+                    <IconButton aria-label="show 17 new notifications" color="inherit">
+                        <Badge badgeContent={17} color="secondary">
+                            <Notifications/>
+                        </Badge>
+                    </IconButton>
+                  </Tooltip>
+              }
               {darkMode?
                   <Tooltip title="Light mode" arrow>
                       <IconButton color="inherit" onClick={()=>dispatch(lightModeOn())}> {/*NE ZABORAVI () od actiona*/}
@@ -155,14 +176,26 @@ export default function Navbar(props) {
                       </IconButton>
                   </Tooltip>
               }
-              <Tooltip title="Manage your account" arrow>
-                  <IconButton onClick={profileMenuOpen} color="inherit">
-                      <AccountCircle/>
-                  </IconButton>
-              </Tooltip>
-              <Button edge="end" variant="contained" color="secondary"  className={classes.logout}>
-                  Logout
-              </Button>
+              {(login !== null) && 
+                  <Tooltip title="Manage your account" arrow>
+                      <IconButton onClick={profileMenuOpen} color="inherit">
+                          <AccountCircle/>
+                      </IconButton>
+                  </Tooltip>
+              }
+              {(login !== null) && 
+                  <Button edge="end" variant="contained" color="secondary" className={classes.logout} onClick={()=>HTTPlogout()}>
+                      LOGOUT               
+                  </Button>
+              }
+              {(login === null) && 
+                  <Link to="/login">
+                        <Button edge="end" variant="contained" color="secondary" className={classes.logout}>
+                            LOGIN               
+                        </Button>
+                  </Link>
+              }
+
         </Toolbar>
       </AppBar>
       <Menu
