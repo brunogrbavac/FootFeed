@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: DataTypes.STRING,
     logo: DataTypes.STRING,
-    coach: DataTypes.STRING
+    coach: DataTypes.STRING,
+    formation: DataTypes.STRING,
   }, {
     sequelize,
     timestamps: false, // ručno dodato jer ne želimo dodatne stupce

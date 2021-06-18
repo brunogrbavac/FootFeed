@@ -1,5 +1,3 @@
-const config = require('../config');
-
 module.exports = class Player{ // ne exportamo OBJEKT kao inače već ES6 klasu za rad sa Sequelize MODELIMA
     
     constructor(player,logger){

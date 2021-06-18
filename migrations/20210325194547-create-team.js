@@ -16,6 +16,9 @@ module.exports = {
       coach: {
         type: Sequelize.STRING
       },
+      formation: {
+        type: Sequelize.STRING
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {

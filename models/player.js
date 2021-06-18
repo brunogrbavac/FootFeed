@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     surname: DataTypes.STRING,
     number: DataTypes.INTEGER,
-    photo: DataTypes.STRING
+    photo: DataTypes.STRING,
+    position: DataTypes.STRING,  
   }, {
     sequelize,
     timestamps: false, // ručno dodato jer ne želimo dodatne stupce

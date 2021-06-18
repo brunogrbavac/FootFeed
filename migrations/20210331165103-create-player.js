@@ -19,6 +19,9 @@ module.exports = {
       photo: {
         type: Sequelize.STRING
       },
+      position: {
+        type: Sequelize.STRING
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {

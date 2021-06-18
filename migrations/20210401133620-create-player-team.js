@@ -24,6 +24,7 @@ module.exports = {
         onUpdate: "CASCADE", // kada se promijeni vrijednost PK u tablici Team onda ce se vrijednost FK u ovoj tablici automatski updateati s novom vrijednosti
         onDelete: "SET NULL", // kada se izbirše redak u tablici Team sa primarnin ključen koji se nalazi kao FK u ovoj tablici onda će se na njegovim mjestima di se on pojavljuje staviti null
       },
+      start: Sequelize.BOOLEAN,
     });
   },
   down: async (queryInterface, Sequelize) => {

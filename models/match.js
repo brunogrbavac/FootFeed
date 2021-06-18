@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Event,{foreignKey:'match_id'}); // 1 strana 1:N relacije, gdje navodimo da Model Match jest u relaciji s više instanci modela Event, preko STUPCA match_id U TABLICI Event!!! - koji sttupac tablice Match je TARGET se navodi u migraciji Eventa
       this.hasMany(models.Photo,{foreignKey:'match_id'}); // -||-
       this.belongsTo(models.User,{foreignKey:'user'}); // N strana 1:N relacije gdje navodimo stupac VLASTITE TABLICE/MODELA i alias po kojem Sequelize radi funkcije modela
+      this.belongsTo(models.Competition,{foreignKey:'competition'}); // N strana 1:N relacije gdje navodimo stupac VLASTITE TABLICE/MODELA i alias po kojem Sequelize radi funkcije modela
     }
   };
 
@@ -20,12 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement:true,
     },
-    date_time: DataTypes.DATE,
+    date_time: DataTypes.STRING,
     article: DataTypes.TEXT,
     stadium: DataTypes.STRING,
     home_team: DataTypes.BIGINT,
     guest_team: DataTypes.BIGINT,
-    user: DataTypes.STRING,
+    user: DataTypes.BIGINT,
+    competition: DataTypes.BIGINT,
+    result: DataTypes.STRING,
   }, {
     sequelize,
     timestamps: false, // ručno dodato jer ne želimo dodatne stupce

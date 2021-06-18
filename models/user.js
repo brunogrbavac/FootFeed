@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.init({
-    username:{ // u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
-      type:DataTypes.STRING,
-      primaryKey:true
+    user_id:{ // u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
+      type:DataTypes.BIGINT,
+      primaryKey:true,
+      autoIncrement: true
     },
+    username: DataTypes.STRING,
     name: DataTypes.STRING,
     surname: DataTypes.STRING,
     email: DataTypes.STRING,

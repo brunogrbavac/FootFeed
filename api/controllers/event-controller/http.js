@@ -3,10 +3,10 @@ const { nodeLogger } = require('../../../loaders/logger');
 
 // kontroler ima sve funkcije koje nam trebaju kao reakcija na requestove
 module.exports = {
-    createEvent: async ( req, res, next) => {
+    createEvent: async (req,res,next) => {
         try{
             let event = await event_instance.createEvent(req.body); 
-            res.status(200).json(event); // vraća dohvaćene podatke (dohvaćene Sequelize querryjem findAll koji je zapravo obicni PSQL querry - preko funkcije u serviceu) kao JSON, te kao status šalje 200 = OK
+            res.status(200).json(event); // vraća dohvaćene podatke te kao status šalje 200 = OK
         }catch(error){
             nodeLogger.error('Error occured in ˝createEvent˝  HTTP function (controller) ' + error);
             next(error); // ovaj error će završiti u loader na glavnom error handling middlewareu 

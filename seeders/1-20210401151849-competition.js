@@ -1,5 +1,5 @@
 'use strict';
-//PRVI SET SEEDOVA - ne ovisi o drugim tablicama
+//PRVI SET SEEDOVA - ne ovisi o drugim tablicama - nakon nje forceUpdate
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('Competition',

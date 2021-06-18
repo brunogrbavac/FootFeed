@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.BIGINT      
       },
       date_time: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       article: {
         type: Sequelize.TEXT
@@ -38,15 +38,26 @@ module.exports = {
         onDelete: "SET NULL", // kada se izbirše redak u tablici Team sa primarnin ključen koji se nalazi kao FK u ovoj tablici onda će se na njegovim mjestima di se on pojavljuje staviti null
       },
       user:{
-        type: Sequelize.STRING,
+        type: Sequelize.BIGINT,
         references:{ // ovo polje je FK, koji se veže na tablicu modela User, key je target stupac u tablici User (njen PK), a as: je alias
           model:'User', 
-          key:'username',
+          key:'user_id',
           as:'user'
         },
         onUpdate: "CASCADE", // kada se promijeni vrijednost PK u tablici User onda ce se vrijednost FK u ovoj tablici automatski updateati s novom vrijednosti
         onDelete: "SET NULL", // kada se izbirše redak u tablici User sa primarnin ključen koji se nalazi kao FK u ovoj tablici onda će se na njegovim mjestima di se on pojavljuje staviti null
       },
+      competition:{
+        type: Sequelize.BIGINT,
+        references:{ // ovo polje je FK, koji se veže na tablicu modela User, key je target stupac u tablici User (njen PK), a as: je alias
+          model:'Competition', 
+          key:'AF_ID_competition',
+          as:'competition'
+        },
+        onUpdate: "CASCADE", // kada se promijeni vrijednost PK u tablici User onda ce se vrijednost FK u ovoj tablici automatski updateati s novom vrijednosti
+        onDelete: "SET NULL", // kada se izbirše redak u tablici User sa primarnin ključen koji se nalazi kao FK u ovoj tablici onda će se na njegovim mjestima di se on pojavljuje staviti null
+      },
+      result: Sequelize.STRING,
     });
   },
   down: async (queryInterface, Sequelize) => {

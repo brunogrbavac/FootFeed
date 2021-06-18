@@ -2,10 +2,14 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('User', { // ovdje automatski stavi ime kao množinu od modela, ručno minnjaš u jedninu
-      username: { // sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
-        type: Sequelize.STRING, // ručno sve minjato
+      user_id: { // sequelize automatski stvara id stupac koji je po defaultu PK, pa ga minjamo ručno
+        type: Sequelize.BIGINT, // ručno sve minjato
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
+      },
+      username: {
+        type: Sequelize.STRING
       },
       name: {
         type: Sequelize.STRING

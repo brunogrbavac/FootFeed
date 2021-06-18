@@ -11,12 +11,16 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Photo.init({
-    uri: {// u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
-      type:DataTypes.STRING,
-      primaryKey:true
+    id: {// u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
+      type:DataTypes.BIGINT,
+      primaryKey:true,
+      autoIncrement: true,
     },
+    uri: DataTypes.STRING,
     match_id: DataTypes.BIGINT,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    size: DataTypes.BIGINT,
+    MIME: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Photo',

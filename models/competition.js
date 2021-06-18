@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   class Competition extends Model {
     static associate(models) { // through - koja je vezna; as - alias kojeg Sequelize koristi za izradu funkcija za upravljanje modelom; foreignKey - stupac koji u veznoj predstavlja ovaj PK (osim u belongsTo - tu predstavlja tuđi PK koji je dio ove tablice)
       this.belongsToMany(models.Team,{through:'team_competition',as:'teams_competition',foreignKey:'AF_ID_competition'}); //N:N pogledaj team.js model - ovo je samo druga strana relacije: kao alias smo naveli teams_competititon ilitiga Teams Of Competition pa će tako izgledati Sequelize funkcije za rad s bazom
+      this.hasMany(models.Match,{foreignKey:'competition'}) // foreignKey se odnosi na stupac u Match koji je referenca na PK ove tablice
     }
   };
 

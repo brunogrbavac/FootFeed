@@ -18,7 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     AF_ID_team: { // -||-
       type: DataTypes.BIGINT,
       primaryKey: true,
-    }
+    },      
+    start: {
+      type: DataTypes.BOOLEAN
+    },
   }, {
     sequelize,
     modelName: 'player_team',
