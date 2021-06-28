@@ -81,37 +81,41 @@ const useStyles = makeStyles((theme) => ({
 const MatchHeader = (props) => {
 
     const classes = useStyles();
+    console.log(props);
 
     return(
         <Paper elevation={3} className={classes.paper}>
                 <Grid container direction="row" justify="center" alignItems="flex-start" style={{paddingTop:"2rem"}}>
-                        <Grid item xs={4}>
-                                <img src={'https://media.api-sports.io/football/teams/608.png'} style={{width:"50%"}} alt="Home team logo"/>
-                                <Typography variant="h3" className={classes.teamName} >HNK Hajduk Split</Typography>
+                         <Grid item xs={4}>
+                                <img src={props.home_team.logo} style={{width:"50%"}} alt="Home team logo"/>
+                                <Typography variant="h3" className={classes.teamName} > {props.home_team.name} </Typography>
                         </Grid>
                         <Grid item xs={4} className={classes.result}>
-                                <Typography variant="h3" className={classes.resultText} >0-0</Typography>
+                                <Typography variant="h3" className={classes.resultText} >{props.result}</Typography>
                         </Grid>
                         <Grid item xs={4}>
-                                <img src={'https://media.api-sports.io/football/teams/620.png'} style={{width:"50%"}} alt="Home team logo"/>
-                                <Typography variant="h3" className={classes.teamName} > GNK Dinamo</Typography>
+                                <img src={props.guest_team.logo} style={{width:"50%"}} alt="Home team logo"/>
+                                <Typography variant="h3" className={classes.teamName} > {props.guest_team.name} </Typography>
                         </Grid>
                         <Grid item xs={12} className={classes.infoText}>
                                 <Divider className={classes.divider}/>                          
-                                <Typography className={classes.infoText} >{"19:30     29. Veljače 2024."}</Typography>
+                                <Typography className={classes.infoText} > {props.date_time} </Typography>
                         </Grid>
                         <Grid item xs={12} >
-                                <Typography  className={classes.infoText} >Stadion Poljud - Split, Croatia</Typography>  
+                                <Typography  className={classes.infoText} > {props.stadium} </Typography>  
                         </Grid>
                         <Grid item xs={12} className={classes.infoText}>
-                                <Typography className={classes.infoText}>Prva HNL</Typography>      
+                                <Typography className={classes.infoText}> {props.competition.name} </Typography>      
                                 <Divider className={classes.divider}/>                          
-                        </Grid>
-                        {props.children}
+                        </Grid> 
+                        <React.Fragment>
+                                {props.children}
+                        </React.Fragment>
                 </Grid>
         </Paper>
 
     );
+
 };
 
 export default MatchHeader;

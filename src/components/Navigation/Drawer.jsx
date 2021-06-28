@@ -23,7 +23,6 @@ import unknown from '../../images/unknown.png';
         .then(data => {
           let allClosed = Array(data.length).fill(false);
           setOpen(allClosed);
-          console.log(data);
           setData(data);
         })
       }
@@ -113,7 +112,6 @@ const DrawerMenu = (props) => {
     const handleExpandChange = (index) => {
       let temporary = open.slice(); // ovaj slice ne radi ništa, ali ako bi samo assignali niz na niz kopira bi referencu i react ne bi detektira promjenu stanja
       temporary[index] = !open[index];
-      console.log(temporary);
       setOpen(temporary);
     };
     

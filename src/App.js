@@ -82,7 +82,16 @@ function App() {
     },
     main: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      padding: theme.spacing(1),
+      [theme.breakpoints.between('sm','md')]:{
+        padding: theme.spacing(2),
+      },
+      [theme.breakpoints.between('md','xl')]:{
+        padding: theme.spacing(3),
+      },
+      [theme.breakpoints.up('xl')]:{
+        padding: theme.spacing(3),
+      },
       margin: "auto",
       maxWidth: "1280px",
       transition: theme.transitions.create('margin', { // za tranzicije Material UI ima vlastite predefinirane vrijednosti unutar default theme objekta
@@ -111,7 +120,9 @@ function App() {
       backgroundColor: "rgb(2 2 2 / 81%)",
   },
   image:{
-    maxWidth:"80vw"
+    width:"85vw",
+    height:"85vh",
+    objectFit:"cover",
   },
   }));
 
@@ -162,7 +173,7 @@ function App() {
                             <Articles perPage={5}/>
                         </Route>
                         {!userFeature && <Route exact path='/login' component={Login}/>}
-                        <Route exact path='/match' component={MatchTabs}/> 
+                        <Route exact path='/match/:id' component={MatchTabs}/> 
                         <Route component={Error}/>  {/*Ovo se rendera kada zatraženi URI ne pripada nijednoj drugoj ruti switcha. */}
                     </Switch>
                   </div>

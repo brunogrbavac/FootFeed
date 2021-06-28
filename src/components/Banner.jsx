@@ -11,11 +11,26 @@ const useStyles = makeStyles((theme) => ({
         boxSizing: "border-box",
     },
     paragraph: {
-        padding: "3rem",
         textAlign: "justify",
         boxSizing: "border-box",
+        padding:"1.2rem",
+        fontSize: "0.9rem",
+        [theme.breakpoints.between('sm','md')]:{
+            padding: "1.7rem",
+            fontSize: "1rem"
+        },
+        [theme.breakpoints.between('md','xl')]:{
+            padding: "2.3rem",
+            fontSize: "1.1rem"
+        },
+        [theme.breakpoints.up('xl')]:{
+            padding: "3rem",
+            fontSize: "1.25rem"
+        }
     },
 }));
+
+//----------------------------------------------------------------------------- Samo logo i tekst za home stranicu
 
 const Banner = () => {
     

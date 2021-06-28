@@ -59,7 +59,6 @@ function Login(props){
             if(response.status===200)
             {
                 dispatch(userLogIn(username));
-                console.log(props);
                 props.history.push(redirectUri);
             }
             else  props.history.push('/login');
