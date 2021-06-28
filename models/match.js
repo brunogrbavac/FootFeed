@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement:true,
     },
     date_time: DataTypes.STRING,
+    headline: DataTypes.STRING,
     article: DataTypes.TEXT,
     stadium: DataTypes.STRING,
     home_team: DataTypes.BIGINT,
@@ -29,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     user: DataTypes.BIGINT,
     competition: DataTypes.BIGINT,
     result: DataTypes.STRING,
+    live: DataTypes.BOOLEAN,
   }, {
     sequelize,
     timestamps: false, // ručno dodato jer ne želimo dodatne stupce

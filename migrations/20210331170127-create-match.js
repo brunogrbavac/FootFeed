@@ -58,6 +58,8 @@ module.exports = {
         onDelete: "SET NULL", // kada se izbirše redak u tablici User sa primarnin ključen koji se nalazi kao FK u ovoj tablici onda će se na njegovim mjestima di se on pojavljuje staviti null
       },
       result: Sequelize.STRING,
+      headline: Sequelize.STRING,
+      live: Sequelize.BOOLEAN,
     });
   },
   down: async (queryInterface, Sequelize) => {

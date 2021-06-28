@@ -17,6 +17,7 @@ module.exports = class Event{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                 request.type &&
                 request.time && 
                 request.match_id && matchExists &&
+                (request.home_team!==undefined) &&
                 request.article
             ){
                 const new_event = await this.Event.create({
@@ -24,6 +25,7 @@ module.exports = class Event{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                     time: request.time,
                     match_id: request.match_id,
                     article: request.article,
+                    home_team: request.home_team
                 });
 
 

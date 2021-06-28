@@ -5,35 +5,38 @@ module.exports = class Photo{ // ne exportamo OBJEKT kao inače već ES6 klasu z
         this.Logger = logger;
     };
 //-------------------------------------------------------------------------------------------------------------------------------------- funkcija uploadanja slika utakmice 
-    
-    async addPhoto(request){
-        try{
-            if(
-                request.file &&
-                request.body.match_id
-            ){
-                this.Logger.info(JSON.stringify({
-                    uri: request.file.path,
-                    match_id: request.body.match_id,
-                    description: request.body.description,
-                    size: request.file.size,
-                    MIME: request.file.mimetype,
-                }));
-                const img = await this.Photo.create({
-                    uri: request.file.path,
-                    match_id: request.body.match_id,
-                    description: request.body.description,
-                    size: request.file.size,
-                    MIME: request.file.mimetype,
-                })
-                this.Logger.info(`Photo of match ${img.match_id} uploaded succesfully to ${img.uri}.`);
+        
+        async addMultiplePhotos(request){
+            try{
+                if(
+                    request.files && // za single je file logično ali pazi
+                    request.body.match_id
+                ){
+                    for( let photo of request.files){
+                        this.Logger.info(JSON.stringify({
+                            uri: photo.path,
+                            match_id: request.body.match_id,
+                            description: request.body.description,
+                            size: photo.size,
+                            MIME: photo.mimetype,
+                        }));
+                        const img = await this.Photo.create({
+                            uri: photo.path,
+                            match_id: request.body.match_id,
+                            description: request.body.description,
+                            size: photo.size,
+                            MIME: photo.mimetype,
+                        });
+                        this.Logger.info(`Photo of match ${img.match_id} uploaded succesfully to ${img.uri}.`);
+                    }
+                }
+                else throw(new Error('Invalid request for uploading a photo.')); // validator
+            }catch(error){
+                this.Logger.error('Error occured in ˝addPhoto˝ function (service)' + error);
+                throw(error);
             }
-            else throw(new Error('Invalid request for uploading a photo.')); // validator
-        }catch(error){
-            this.Logger.error('Error occured in ˝addPhoto˝ function (service)' + error);
-            throw(error);
-        }
-    };
+        };
+   
 //-------------------------------------------------------------------------------------------------------------------------------------- funkcija uploadanja slika utakmice 
     
 async getPhoto(id){

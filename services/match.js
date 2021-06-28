@@ -30,13 +30,15 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                 const new_match = await this.Match.create({
                     date_time: request.body.date_time,
                     article: request.body.article,
+                    headline: request.body.headline,
                     stadium: request.body.stadium,
                     home_team: request.body.home_team,
                     guest_team: request.body.guest_team,
                     user: request.session.user,
-                    competition: request.body.competition
+                    competition: request.body.competition,
+                    result: "0-0"
                 });
-                this.Logger.info('User ' + request.session.user + ' created a match ' + new_match.match_id + ' theat was added succesfully to the database. '+ request.body.home_team +'|'+ request.body.guest_team +'|'+ request.body.date_time +'|'+ request.body.article +'|'+ request.body.stadium );
+                this.Logger.info('User ' + request.session.user + ' created a match ' + new_match.match_id + ' theat was added succesfully to the database. '+ request.body.home_team +'|'+ request.body.guest_team +'|'+ request.body.date_time +'|'+ request.body.article +'|'+ request.body.stadium+'|'+ request.body.headline );
                 return "OK";
             }
             else throw(new Error('Invalid input for creating a match.')); // validator
@@ -78,21 +80,32 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
     };
 //-------------------------------------------------------------------------------------------------------------------------------------- funkcija dohvata svih događaja jednog susreta
 
-    async getAllMatchEvents(request) // request body objekt s podacima za unos
+    async getAllMatchEvents(matchId) // request body objekt s podacima za unos
     {
         try {
-            let matchExists = await this.Match.findOne({where: {match_id: request.match_id}});
-            if(
-                request.match_id && matchExists
-            ){
-                const matchSelected = await this.Match.findOne({where: {match_id: request.match_id}});
-                const events = await matchSelected.getEvents(); // sequelize funkcija
+            let matchExists = await this.Match.findOne({where: {match_id: matchId}});
 
-                console.log(events);
+            if(
+                matchId && matchExists
+            ){
+                const events = await matchExists.getEvents(); // sequelize funkcija
+                const home_teamFull = await this.Team.findOne({ where : { AF_ID_team : matchExists.home_team }});
+                const guest_teamFull = await this.Team.findOne({ where : { AF_ID_team : matchExists.guest_team }});
+                const competitionFull = await this.Competition.findOne({ where : {AF_ID_competition : matchExists.competition }});
+                let userFull = await this.User.findOne({where : {user_id: matchExists.user}, attributes : ['user_id', 'username']});
+                const photos = await this.Photo.findAll({ where : { match_id : matchId }, attributes: ['id','description']});
 
                 let eventsForResponse = [];
+                let matchForResponse = {
+                    ...matchExists.dataValues,
+                    home_team: home_teamFull,
+                    guest_team: guest_teamFull,
+                    user: userFull,
+                    competition: competitionFull,
+                    photos: photos,
+                }
 
-                this.Logger.info('Events of match succesfully queried. '+ events.length + ' events total for match ID: '+ request.match_id +'.');
+                this.Logger.info('Events of match succesfully queried. '+ events.length + ' events total for match ID: '+ matchId +'.');
 
                 for(let i=0; i<events.length; i++){
                     let players = await events[i].getEvents_player();
@@ -100,18 +113,18 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                         event_id: events[i].event_id,
                         type: events[i].type,
                         time: events[i].time,
-                        match_id: request.match_id,
+                        match_id: matchId,
                         players: players,
                         article: events[i].article,
                     });
                     this.Logger.info('Players of event '+ events[i].event_id+' succesfully loaded. In total '+ players.length+' players.');
                 }
-                return { ...matchExists.dataValues, events: eventsForResponse };
+                return { ...matchForResponse, events: eventsForResponse };
             }
             else throw(new Error('Invalid input for geting events of a match.')); // validator
         }
         catch(error){
-            this.Logger.error('Error in function ˝createEvent˝ (service). ' + error);
+            this.Logger.error('Error in function ˝getAllMatchEvents˝ (service). ' + error);
             throw(error);
         }
     };

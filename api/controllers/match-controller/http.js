@@ -23,7 +23,7 @@ module.exports = {
     },
     getAllMatchEvents: async (req,res,next) => {
         try{
-            let matches = await match_instance.getAllMatchEvents(req.body); 
+            let matches = await match_instance.getAllMatchEvents(req.params.id); 
             res.status(200).json(matches); // vraća dohvaćene podatke (dohvaćene Sequelize querryjem findAll koji je zapravo obicni PSQL querry - preko funkcije u serviceu) kao JSON, te kao status šalje 200 = OK
         }catch(error){
             nodeLogger.error('Error occured in ˝getAllMatchEvents˝  HTTP function (controller) ' + error);

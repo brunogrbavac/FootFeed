@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: DataTypes.STRING,
     time: DataTypes.STRING,
+    home_team: DataTypes.BOOLEAN,
     match_id: DataTypes.BIGINT,
     article: DataTypes.TEXT,
   }, {

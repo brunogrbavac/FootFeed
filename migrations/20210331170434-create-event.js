@@ -14,6 +14,9 @@ module.exports = {
       time: {
         type: Sequelize.STRING
       },
+      home_team: {
+        type: Sequelize.BOOLEAN
+      },
       article: {
         type: Sequelize.TEXT
       },

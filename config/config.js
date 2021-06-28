@@ -10,6 +10,11 @@ module.exports = { // objekt koji mozemo kasnije dohvacat kroz dotenv?
     use_env_variable: "DATABASE_URL",
     url: process.env.DATABASE_URL,
     dialect: "postgres",
+    pool: {
+      max: 10,
+      min: 0,
+      idle: 10000
+    },
     logging: console.log, // pomoću koje funkcije logga stvari tu mozemo poslati Winston logger npr.
   },
   production: {

@@ -6,9 +6,10 @@ const config = require('../../../config');
 
 // kontroler ima sve funkcije koje nam trebaju kao reakcija na requestove
 module.exports = {
-    addPhoto: async (req,res,next) => {
+
+    addMultiplePhotos: async (req,res,next) => {
         try{
-            await photo_instance.addPhoto(req); // cili request radi req.file
+            await photo_instance.addMultiplePhotos(req); // cili request radi req.file
             res.sendStatus(200); // vraća 200 OK da je uspješno uploadano
         }catch(error){
             nodeLogger.error('Error occured in ˝addPhoto˝  HTTP function (controller) ' + error);
