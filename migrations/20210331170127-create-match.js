@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.BIGINT      
       },
       date_time: {
-        type: Sequelize.STRING,
+        type: Sequelize.DATE,
       },
       article: {
         type: Sequelize.TEXT
@@ -57,9 +57,16 @@ module.exports = {
         onUpdate: "CASCADE", // kada se promijeni vrijednost PK u tablici User onda ce se vrijednost FK u ovoj tablici automatski updateati s novom vrijednosti
         onDelete: "SET NULL", // kada se izbirše redak u tablici User sa primarnin ključen koji se nalazi kao FK u ovoj tablici onda će se na njegovim mjestima di se on pojavljuje staviti null
       },
-      result: Sequelize.STRING,
+      result: {
+        type: Sequelize.STRING,
+        defaultValue: "0-0",
+      },
       headline: Sequelize.STRING,
-      live: Sequelize.BOOLEAN,
+      live: {
+        type: Sequelize.STRING,
+        defaultValue: false,
+      },
+      start: Sequelize.DATE,
     });
   },
   down: async (queryInterface, Sequelize) => {

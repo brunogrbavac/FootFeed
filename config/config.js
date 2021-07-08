@@ -11,7 +11,7 @@ module.exports = { // objekt koji mozemo kasnije dohvacat kroz dotenv?
     url: process.env.DATABASE_URL,
     dialect: "postgres",
     pool: {
-      max: 10,
+      max: 6,
       min: 0,
       idle: 10000
     },

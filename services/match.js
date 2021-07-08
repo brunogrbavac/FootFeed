@@ -36,10 +36,9 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                     guest_team: request.body.guest_team,
                     user: request.session.user,
                     competition: request.body.competition,
-                    result: "0-0"
                 });
                 this.Logger.info('User ' + request.session.user + ' created a match ' + new_match.match_id + ' theat was added succesfully to the database. '+ request.body.home_team +'|'+ request.body.guest_team +'|'+ request.body.date_time +'|'+ request.body.article +'|'+ request.body.stadium+'|'+ request.body.headline );
-                return "OK";
+                return new_match;
             }
             else throw(new Error('Invalid input for creating a match.')); // validator
         }
@@ -78,9 +77,65 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
             throw(error);
         }
     };
+//-------------------------------------------------------------------------------------------------------------------------------------- funkcija dohvata svih utakmica koje je stvorio User
+
+async getAllUserMatches(request){
+    try{
+        const matches = await this.Match.findAll({where: {user: request.session.user}, raw: true} ); // dohvaća sve redke iz tablice u bazi koja odgovara Sequelize modelu Match
+
+        let finalResponse = [];
+        for(let match of matches){
+            const photos = await this.Photo.findAll({ where : { match_id : match.match_id }, attributes: ['id','description']});
+            const user = await this.User.findOne({ where : { user_id : match.user }, attributes: ['user_id', 'username']});
+            const competition = await this.Competition.findOne({ where : { AF_ID_competition : match.competition }});
+            const home_team = await this.Team.findOne({ where : { AF_ID_team : match.home_team }});
+            const guest_team = await this.Team.findOne({ where : { AF_ID_team : match.guest_team }});
+
+            finalResponse.push({
+                ...match,
+                user: user, // PREPIŠE BIVŠI USER
+                competition: competition,
+                home_team: home_team,
+                guest_team: guest_team,
+                photos: photos,
+            });
+        };
+        this.Logger.info('All matches of user succesfully queried. ');
+        return finalResponse;
+    }catch(error){
+        this.Logger.error('Error occured in ˝getAllUserMatches˝ function (service)' + error);
+        throw(error);
+    }
+};
+//-------------------------------------------------------------------------------------------------------------------------------------- funkcija mijenja podatke određene utakmice
+
+async editMatch(request){
+    try{
+        const match = await this.Match.findOne({where: {match_id: request.body.match_id}, raw: true} ); // dohvaća sve redke iz tablice u bazi koja odgovara Sequelize modelu Match
+
+        if(match.user===request.session.user){
+            await this.Match.update({
+                date_time: request.body.date_time,
+                article: request.body.article,
+                headline: request.body.headline,
+                stadium: request.body.stadium,
+                home_team: request.body.home_team,
+                guest_team: request.body.guest_team,
+                user: request.session.user,
+                competition: request.body.competition,
+            },{where:{match_id: request.body.match_id}});
+            return 200;
+        }
+        else return 403;
+    }catch(error){
+        this.Logger.error('Error occured in ˝editMatch˝ function (service)' + error);
+        throw(error);
+    };
+};
+
 //-------------------------------------------------------------------------------------------------------------------------------------- funkcija dohvata svih događaja jednog susreta
 
-    async getAllMatchEvents(matchId) // request body objekt s podacima za unos
+    async getAllMatchEvents(matchId) 
     {
         try {
             let matchExists = await this.Match.findOne({where: {match_id: matchId}});
@@ -126,6 +181,27 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
         catch(error){
             this.Logger.error('Error in function ˝getAllMatchEvents˝ (service). ' + error);
             throw(error);
+        }
+    };
+
+
+    async goLiveMatch( match_id ){
+        try{
+            await this.Match.update({live: true, start: new Date()},{where:{match_id:match_id}});
+        }
+        catch(error){
+            this.Logger.error('Error in function ˝goLiveMatch˝ (service). ' + error);
+            throw(error);    
+        }
+    };
+
+    async goLiveHalf( match_id ){
+        try{
+            await this.Match.update({start: new Date() },{where:{match_id:match_id}});
+        }
+        catch(error){
+            this.Logger.error('Error in function ˝goLiveMatch˝ (service). ' + error);
+            throw(error);    
         }
     };
 };

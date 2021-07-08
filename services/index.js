@@ -9,9 +9,9 @@ const photo_class = require('./photo');
 const competition_class = require('./competition');
 
 
-let player_instance = new player_class(models.Player, nodeLogger); // stvaramo instance klasa za rad s pojedinim Sequelize MODELIMA
+let player_instance = new player_class(models.Player, models.player_team , models.Team, nodeLogger); // stvaramo instance klasa za rad s pojedinim Sequelize MODELIMA
 let match_instance = new match_class(models.Match, models.Team, models.Event, models.Photo, models.User, models.Competition, nodeLogger); // stvaramo instance klasa za rad s pojedinim Sequelize MODELIMA
-let event_instance = new event_class(models.Event, models.Match, models.player_event, nodeLogger);
+let event_instance = new event_class(models.Event, models.Match, models.player_event,models.Player, nodeLogger);
 let update_instance = new update_class(models.Team, models.team_competition, models.Player, models.player_team, nodeLogger);
 let user_instance = new user_class(models.User, nodeLogger);
 let photo_instance = new photo_class(models.Photo, nodeLogger);

@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement:true,
     },
-    date_time: DataTypes.STRING,
+    date_time: DataTypes.DATE,
     headline: DataTypes.STRING,
     article: DataTypes.TEXT,
     stadium: DataTypes.STRING,
@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     competition: DataTypes.BIGINT,
     result: DataTypes.STRING,
     live: DataTypes.BOOLEAN,
+    start: DataTypes.DATE, //zapravo kad je počelo trenutno poluvrijeme za timer
   }, {
     sequelize,
     timestamps: false, // ručno dodato jer ne želimo dodatne stupce

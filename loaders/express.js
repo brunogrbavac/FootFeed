@@ -29,10 +29,10 @@ module.exports = (app, httpLogger) => {
 
     app.use(cors(corsOptions));
     app.options("/*", function(req, res, next){// regularni izraz /*-> ovo se odnosi na sve rute koji pocinju sa /-> TO SU ZAPRAVO SVE RUTE
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-         res.header('Access-Control-Allow-Credentials','true');
-         res.send(200);
+        res.header('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+        res.header('Access-Control-Allow-Credentials','true');
+        res.send(200);
     });
     
     app.use(httpLogger); //mountanje middlewarea se vrši funkcijom .use  - funkcije koje se izvrše kada poziv ide na naznačeni path - ovdje patha nema pa ide uvijek? W
