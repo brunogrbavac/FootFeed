@@ -4,6 +4,7 @@ import { Button, Grid, Paper, TextField } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { userLogIn } from '../../redux/actions/login';
 import login from '../../images/login.png';
+import CustomSnackbar from '../Snackbar';
 
 const useStyles = makeStyles ((theme) => ({
     root: {
@@ -36,6 +37,7 @@ function Login(props){
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [open, setOpen] = useState(()=>false);
     let classes = useStyles();
     const redirectUri = '/'; //useSelector(state => state.redirect);
     const dispatch = useDispatch();
@@ -61,7 +63,10 @@ function Login(props){
                 dispatch(userLogIn(username));
                 props.history.push(redirectUri);
             }
-            else  props.history.push('/login');
+            else  {
+                setOpen(true);
+                console.log("opening");
+            };
         })
         .catch((error)=>{
             console.log('Error in fetch function '+ error);
@@ -76,13 +81,14 @@ function Login(props){
                                 <form onSubmit={(e)=>{HTTPLogin(e)}} className={classes.root} noValidate autoComplete="off">
                                         <TextField onChange={(e)=>{setUsername(e.target.value)}} fullWidth className={classes.fields} type="text" label="Username" variant="filled"/>
                                         <TextField onChange={(e)=>{setPassword(e.target.value)}} fullWidth  className={classes.fields} type="password" label="Password" variant="filled"/>
-                                        <div className={classes.link}><a href={"/forgot"} style={{color:"grey"}}>Forgot your password?</a></div>
+                                        {/* <div className={classes.link}><a href={"/forgot"} style={{color:"grey"}}>Forgot your password?</a></div> */}
                                         <Button variant="contained" color="secondary" size="large" className={classes.loginButton} type="submit">
                                             Log in
                                         </Button>
                                 </form>
                         </Paper>
                 </Grid>
+                <CustomSnackbar type="error" open={open} message="Wrong username or password!" setOpen={(val) => setOpen(val)}/>
         </Grid>
 
     );

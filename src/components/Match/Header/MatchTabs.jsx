@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Tabs, Tab , Typography, Box, CircularProgress } from '@material-ui/core';
-import MatchHeader from './MatchHeader';
-import StatsTab from './StatsTab';
-import ArticleTab from './ArticleTab';
-import FeedTab from './FeedTab';
-import EventTab from './EventTab';
+import MatchHeader from '../Header/MatchHeader';
+import StatsTab from '../Statistics/StatsTab';
+import ArticleTab from '../ArticleTab';
+import FeedTab from '../Feed/FeedTab';
+import EventTab from '../Event/EventTab';
+import io from 'socket.io-client';
+let socket;
 
 const useStyles = makeStyles(theme => ({
   appbar:{
@@ -77,7 +79,7 @@ const generateProps = (index) => {
 };
 //----------------------------------------------------------------------------------- HTTP zahtjev za podacima o utakmici
 
-const HTTPMatch = (id, setMatch, setLoading) => {
+ function  HTTPMatch(id, setMatch, setLoading){
 
     const requestOptions = {
       method: 'GET',
@@ -94,6 +96,7 @@ const HTTPMatch = (id, setMatch, setLoading) => {
           .then(data => {
             setMatch(data);
             setLoading(false);
+            return data;
           })     
     }
     else if(response.status===403)
@@ -108,14 +111,88 @@ const HTTPMatch = (id, setMatch, setLoading) => {
 const MatchTabs = (props)=> {
 
   const classes = useStyles();
-  const [value, setValue] = useState( () => 0 );
-  const [match, setMatch] = useState( () => {} );
-  const [loading, setLoading] = useState( () => true );
+  const [value, setValue] = useState(() => 0 );
+  const [match, setMatch] = useState(() => {return({match_id:-1})} );
+  const [loading, setLoading] = useState(() => true );
+  const [event, setEvent] = useState(() => null );
+
   const user = useSelector ( store => store.login );
 
   useEffect(()=>{
     HTTPMatch( props.match.params.id, (val)=>setMatch(val), (val)=>setLoading(val));
   },[props.match.params.id]);
+
+
+  useEffect(()=>{
+    if(match!==undefined && match.live  && socket===undefined){
+      var connectionOptions =  {
+        "force new connection" : true,
+        "reconnectionAttempts": "Infinity", 
+        "timeout" : 10000,                  
+        "transports" : ["websocket"]
+      };
+      socket = io('localhost:3001', connectionOptions);
+      socket.emit('join', props.match.params.id);
+
+    };
+    console.log("opet konekta")
+  },[props.match.params.id]);// eslint-disable-line react-hooks/exhaustive-deps 
+
+
+
+
+  useEffect(()=>{
+    if(socket!==undefined && match.match_id!==-1){
+      console.log(match.events);
+      socket.on('/event/Goal', (msg) => {
+        if(event.event_id!==msg.event_id){
+          setEvent(msg);
+          let arr = match.events.slice();
+          console.log(arr);
+          arr.push(msg);
+          setMatch({...match, result:msg.result, events: arr});
+        }
+      });
+      socket.on('/event/Halftime', (msg) => {
+        if(event.event_id!==msg.event_id){
+          setEvent(msg);
+        let arr = match.events.slice();
+        arr.push(msg);
+        setMatch({...match,start:msg.start, events: arr});}
+      });
+      socket.on('/event/Secondhalf', (msg) => {
+        if(event.event_id!==msg.event_id){
+          setEvent(msg);
+        let arr = match.events.slice();
+        arr.push(msg);
+        setMatch({...match,start:msg.start, events: arr});}
+      });
+      socket.on('/event/End', (msg) => {
+        if(event.event_id!==msg.event_id){
+          setEvent(msg);
+        let arr = match.events.slice();
+        arr.push(msg);
+        setMatch({...match,live:msg.live, events: arr});}
+      });
+      socket.on('/event/regular', (msg) => {
+        console.log(msg);
+        if(event.event_id!==msg.event_id){
+          let arr = match.events.slice();
+        arr.push(msg);
+        setEvent(msg);
+        setMatch({...match, events: arr});}
+      });
+    }
+  },[socket]);
+  
+
+  const emitCreateEvent = ( payload ) => {
+    if(socket!==undefined){
+      socket.emit('/event/create', payload);
+
+    }
+  };
+
 
   const handleChange = (event, newValue) => { // minja stranicu koja se prikazuje ako kliknemo
     setValue(newValue);
@@ -130,8 +207,8 @@ const MatchTabs = (props)=> {
     <CircularProgress/>
     :
     <React.Fragment>
-        <MatchHeader home_team={match.home_team} guest_team={match.guest_team} user={match.user} result={match.result} stadium={match.stadium} date_time={match.date_time} competition={match.competition} >
-            <React.Fragment >
+        <MatchHeader start={match.start} live={match.live} home_team={match.home_team} guest_team={match.guest_team} user={match.user} result={match.result} stadium={match.stadium} date_time={match.date_time} competition={match.competition} >
+            <React.Fragment>
                 <AppBar position="static" className={classes.appbar} elevation={0}>
                         <Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary"  centered  >
                                 <Tab label="Article" {...generateProps(0)} className={classes.tab}/>
@@ -146,14 +223,14 @@ const MatchTabs = (props)=> {
                             <ArticleTab article={match.article} headline={match.headline} photos={match.photos}/>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                          <FeedTab/>
+                          <FeedTab events={match.events}/>
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                          <StatsTab/>
+                          <StatsTab events={match.events}/>
                         </TabPanel>
-                        {(user!==null) &&
+                        {(user===match.user.username && match.live) &&
                         <TabPanel value={value} index={3}>
-                          <EventTab home_team={match.home_team} guest_team={match.guest_team}/>
+                          <EventTab result={match.result} match_id={props.match.params.id} emitCreateEvent={emitCreateEvent} start={match.start} home_team={match.home_team} guest_team={match.guest_team} date_time={match.date_time}/>
                         </TabPanel>}
                 </SwipeableViews>
             </React.Fragment>

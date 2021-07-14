@@ -13,11 +13,17 @@ import { default as Drawer} from './components/Navigation/Drawer';
 import Articles from './components/Portal/Articles';
 import Error from './components/Error';
 import Login from './components/Account/Login';
-import MatchTabs from './components/Match/MatchTabs';
+import MatchTabs from './components/Match/Header/MatchTabs';
 import { darkModeOn, lightModeOn } from './redux/actions/darkMode';
 import { userLogIn } from './redux/actions/login';
 import { imagesUnloaded } from './redux/actions/gallery';
 import Carousel  from 'react-material-ui-carousel';
+import CreateMatch  from './components/Match/Create/CreateMatch';
+import Dial from './components/Dial';
+import UserMatches from './components/Account/UserMatches';
+import FilteredArticles from './components/Portal/FilteredArticles';
+import Register from './components/Account/Register';
+import Edit from './components/Match/Create/Edit';
 
 const lightTheme = createMuiTheme({
     palette: {
@@ -83,6 +89,7 @@ function App() {
     main: {
       flexGrow: 1,
       padding: theme.spacing(1),
+      minHeight:"90vh",
       [theme.breakpoints.between('sm','md')]:{
         padding: theme.spacing(2),
       },
@@ -118,12 +125,19 @@ function App() {
     backdrop: {
       zIndex: theme.zIndex.drawer + 1,
       backgroundColor: "rgb(2 2 2 / 81%)",
-  },
-  image:{
-    width:"85vw",
-    height:"85vh",
-    objectFit:"cover",
-  },
+    },
+    image:{
+      width:"85vw",
+      height:"85vh",
+      objectFit:"cover",
+    },
+    articles:{
+      alignItems:"center",
+      display:"flex",
+      minHeight:"80vh",
+      flexDirection:"column",
+      justifyContent:"center",
+    }
   }));
 
   if(loading){
@@ -153,7 +167,7 @@ function App() {
 
   const classes = useStyles();
 
-  return ( //PITAJ LUKSICA ZA safari-pinned-tab
+  return (
       <ThemeProvider theme={ darkMode ? darkTheme : lightTheme}>
               {loading? <div className={classes.background}><CircularProgress color="secondary" size="5rem"  className={classes.progress} /></div> 
               :<div className={classes.background}>
@@ -170,12 +184,18 @@ function App() {
                     <Switch>
                         <Route exact path='/'>
                             <Banner/>
-                            <Articles perPage={5}/>
+                            <Articles perPage={5}/> 
                         </Route>
+                        <Route exact path='/matches/:type/:value' component={FilteredArticles}/>
+                        <Route exact path='/match/create' component={CreateMatch}/>
+                        {userFeature && <Route exact path='/match/user' component={UserMatches}/>}
+                        {userFeature && <Route exact path='/match/edit' component={Edit}/>}
                         {!userFeature && <Route exact path='/login' component={Login}/>}
+                        {!userFeature && <Route exact path='/register' component={Register}/>}
                         <Route exact path='/match/:id' component={MatchTabs}/> 
                         <Route component={Error}/>  {/*Ovo se rendera kada zatraženi URI ne pripada nijednoj drugoj ruti switcha. */}
                     </Switch>
+                    {userFeature && <Dial/>}
                   </div>
                 </div>
               }

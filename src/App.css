@@ -37,6 +37,14 @@
   }
 }
 
+a:hover, /* DODATO */
+a:visited,
+a:link,
+a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
 .MuiPagination-ul { /* DODATO */
   justify-content: center !important;
 }
@@ -49,11 +57,88 @@
 .MuiCardHeader-avatar{ /* DODATO */
   margin-right: 0 !important;
 }
-
-a:hover, /* DODATO */
-a:visited,
-a:link,
-a:active {
-    text-decoration: none;
-    color: inherit;
+.MuiMobileStepper-dots{ /* DODATO */
+  display:none !important;
 }
+.react-swipeable-view-container{ /* DODATO */
+  align-items: center !important;
+}
+.MuiInputBase-root{ /* DODATO */
+  width: 100%;
+}
+
+
+/*------------------------------------------------------*/
+.MuiDataGrid-colCellWrapper  {
+  background-color: #009688;
+  color: white !important;
+  border-radius: 7px;
+  font-weight: 600 !important;
+  font-size: 1.05em;
+}
+.MuiDataGrid-sortIcon {
+  color: white;
+}
+.MuiDataGrid-iconSeparator{
+  color: white !important;
+}
+.MuiDataGrid-footer {
+  background-color: rgb(196, 193, 193);
+  border: 1px solid rgba(224, 224, 224, 1);
+  border-radius: 7px;
+}
+.MuiDataGrid-columnsContainer {
+  background-color: #009688;
+  color: white !important;
+  border-radius: 7px;
+  z-index: 0 !important;
+  /* width: max-content;ovo isto */
+}
+.MuiDataGrid-menuIconButton {
+  color: white !important;
+}
+.MuiDataGrid-root {
+  border: none !important;
+}
+.MuiDataGrid-row {
+  border-radius: 7px;
+}
+/* .Mui-selected {
+  background-color: #009688 !important;
+  color: white;
+} */
+.MuiDataGrid-cell {
+  border: none !important;
+  color: black !important;
+}
+.MuiDataGrid-colCellTitle {
+  font-weight: 500 !important;
+  font-size: 1.05em;
+}
+/* .MuiDataGrid-root .MuiDataGrid-window{
+  width: fit-content;
+} */
+.MuiDataGrid-window {
+  margin-top: 5px;
+}
+.Mui-even {
+  background-color: rgb(194, 193, 193);
+}
+
+.Mui-odd {
+  background-color: rgb(150, 148, 148);
+}
+.MuiDataGrid-root .MuiDataGrid-row:hover:hover{
+  background-color: #838282 !important;
+
+}
+
+.lobster {
+  font-family: "Lobster";
+}
+.redHatDisplay{
+  font-family: 'Red Hat Display', sans-serif;
+}
+.MuiDataGrid-columnsContainer .MuiDataGrid-colCell:nth-last-of-type(2) .MuiDataGrid-iconSeparator	{
+  display:none !important;
+}  

@@ -1,7 +1,20 @@
 import React, { Fragment } from 'react';
 import { ListItem, ListItemText, makeStyles } from '@material-ui/core';
-import offside from '../../images/offside.png';
-import kit from '../../images/kit.png';
+import offside from '../../../images/offside.png';
+import kit from '../../../images/kit.png';
+import field from '../../../images/field.png';
+import fulltime from '../../../images/fulltime.png';
+import halftime from '../../../images/halftime.png';
+import red from '../../../images/red.png';
+import score from '../../../images/score.png';
+import shoe from '../../../images/shoe.png';
+import substitution from '../../../images/substitution.png';
+import target from '../../../images/target.png';
+import trophy from '../../../images/trophy.png';
+import whistle from '../../../images/whistle.png';
+import yellow from '../../../images/yellow.png';
+import added from '../../../images/offside.png';
+import FootyFeedIconNoFF from '../../../images/FootyFeedIconNoFF.ico';
 import clsx from  'clsx';
 
 
@@ -103,31 +116,54 @@ const useStyles = makeStyles((theme)=>({
 
 //----------------------------------------------------------------------------------- Ovisno o postotku rendera Zelenu ili Narančastu letvicu => za domaćina lijevo za gosta u desno (rotirana)
 
+const getIcon = (type) =>{
+    let icon;
+
+    if( type.includes("Goal")){ icon = FootyFeedIconNoFF;}
+    else if( ["Offside "].includes(type)){ icon = offside; }
+    else if( ["Duel ", "Duel In air","Dribling","Tackle"].includes(type)){ icon = kit; }
+    else if( [].includes(type)){ icon = field; }
+    else if( ["Second half "].includes(type)){ icon = fulltime; }
+    else if( ["Halftime "].includes(type)){ icon = halftime; }
+    else if( type==="Red card "){ icon = red; }
+    else if( ["End"].includes(type)){ icon = score; }
+    else if( ["Substitution"].includes(type)){ icon = substitution; }
+    else if( ["Save","Save Outside the box","Save  Big chance","Save Outside the box Big chance","Shot off target","Shot off target Outside the box","Shot off target Big chance","Shot off target Outside the box Big chance", "Shot blocked","Shot blocked Outside the box","Shot blocked Big chance","Shot blocked Outside the box Big chance"].includes(type)){ icon = target; }
+    // else if( [].includes(props2.eventType)){ icon = trophy; }
+    else if( ["Corner ","Warning ","Penalty ", "Free kick "].includes(type)){ icon = whistle; }
+    else if( ["Added time "].includes(type)){ icon = added; }
+    else if( ["Yellow card "].includes(type)){ icon = yellow; }
+    else{icon = shoe};
+    console.log(JSON.stringify(type));
+    return icon;
+};
+    
+
 const FeedBar = (props) => {
 
     const classes = useStyles();
 
     return (
         <Fragment>
-            {props.home?
+            {props.event.home_team?
                     <ListItem className={classes.home}>
-                            <img src={offside} className={classes.icon} alt="offside"/>
-                            <span className={clsx(classes.text,classes.boldText,classes.homeText)}>83'  </span>
-                            <span className={clsx(classes.text,classes.boldText,classes.homeText)} style={{marginRight:"1.5rem"}}>EVENT </span>
+                            <img src={getIcon(props.event.type)} className={classes.icon} alt="TypeIcon"/>
+                            <span className={clsx(classes.text,classes.boldText,classes.homeText)}>{props.event.time} </span>
+                            <span className={clsx(classes.text,classes.boldText,classes.homeText)} style={{marginRight:"1.5rem"}}>{props.event.players[0]?props.event.players[0].surname:props.event.type} </span>
                         <ListItemText className={classes.homeText}>
 
-                            <span className={clsx(classes.text,classes.homeText)}>Lorem ipsum dolor sit amet, labore Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore  </span>
+                            <span className={clsx(classes.text,classes.homeText)}>{props.event.article} </span>
                         </ListItemText>
                     </ListItem>
                     :<ListItem className={classes.away}>
                         <ListItemText className={classes.awayText}>
-                            <span className={clsx(classes.text,classes.awayText)}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore  </span>
+                            <span className={clsx(classes.text,classes.awayText)}>{props.event.article} </span>
 
 
                         </ListItemText >                    
-                        <span className={clsx(classes.text,classes.boldText,classes.awayTextBold,classes.bold)} style={{marginLeft:"1.5rem"}}>EVENT  </span>
-                            <span className={clsx(classes.text,classes.boldText,classes.awayTextBold,classes.bold)}>83'  </span>   
-                            <img src={kit} className={clsx(classes.icon, classes.iconLeft)}  alt="kit"/>
+                        <span className={clsx(classes.text,classes.boldText,classes.awayTextBold,classes.bold)} style={{marginLeft:"1.5rem"}}>{props.event.players[0]?props.event.players[0].surname:props.event.type} </span>
+                            <span className={clsx(classes.text,classes.boldText,classes.awayTextBold,classes.bold)}>{props.event.time}  </span>   
+                            <img src={getIcon(props.event.type)} className={clsx(classes.icon, classes.iconLeft)}  alt="kit"/>
                     </ListItem>
             }
         </Fragment>
@@ -137,3 +173,9 @@ const FeedBar = (props) => {
 export default FeedBar;
 
 
+// event_id: events[i].event_id,
+// type: events[i].type,
+// time: events[i].time,
+// match_id: matchId,
+// players: players,
+// article: events[i].article,

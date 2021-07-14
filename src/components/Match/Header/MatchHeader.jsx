@@ -1,6 +1,8 @@
 import React from 'react';
 import { Grid, Paper, Typography, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { LiveTv } from '@material-ui/icons';
+import Timer from './Timer';
 
 const useStyles = makeStyles((theme) => ({
     paper:{
@@ -34,6 +36,16 @@ const useStyles = makeStyles((theme) => ({
     },
     result:{
         alignSelf:"center",
+        height: "5rem",
+        [theme.breakpoints.between('sm','lg')]:{
+            height: "10rem",
+        },
+        [theme.breakpoints.between('lg','xl')]:{
+            height: "15rem",
+        },
+        [theme.breakpoints.up('xl')]:{
+            height: "20rem",
+        }
     },
     resultText:{
         fontSize:"2rem",
@@ -74,6 +86,34 @@ const useStyles = makeStyles((theme) => ({
             margin:"1.5rem 0",
         }
     },
+    live:{
+        textAlign:"center",
+        fontSize:"0.5rem",
+        [theme.breakpoints.between('sm','lg')]:{
+            fontSize: "1rem",
+        },
+        [theme.breakpoints.between('lg','xl')]:{
+            fontSize: "1.3rem",
+        },
+        [theme.breakpoints.up('xl')]:{
+            fontSize: "1.5rem",
+        }
+    },
+    liveIcon:{
+        verticalAlign:"text-bottom",
+        paddingRight:"5px",
+        color:"red",
+        fontSize:"0.75rem",
+        [theme.breakpoints.between('sm','lg')]:{
+            fontSize: "1.5rem",
+        },
+        [theme.breakpoints.between('lg','xl')]:{
+            fontSize: "1.8rem",
+        },
+        [theme.breakpoints.up('xl')]:{
+            fontSize: "2rem",
+        }
+    },
 }));
 
 //----------------------------------------------------------------------------------- Header koji ostaje fixan za sve tabove - rezultat, timovi, datum, stadion ...
@@ -81,7 +121,8 @@ const useStyles = makeStyles((theme) => ({
 const MatchHeader = (props) => {
 
     const classes = useStyles();
-    console.log(props);
+    const propsDate = new Date(props.date_time);
+    console.log(propsDate);
 
     return(
         <Paper elevation={3} className={classes.paper}>
@@ -90,8 +131,11 @@ const MatchHeader = (props) => {
                                 <img src={props.home_team.logo} style={{width:"50%"}} alt="Home team logo"/>
                                 <Typography variant="h3" className={classes.teamName} > {props.home_team.name} </Typography>
                         </Grid>
-                        <Grid item xs={4} className={classes.result}>
+                        <Grid item xs={4} container item direction="column" justify="space-evenly" xs={4} className={classes.result}>
+                                {props.live && <span className={classes.live}><LiveTv className={classes.liveIcon}/>UŽIVO</span>}
                                 <Typography variant="h3" className={classes.resultText} >{props.result}</Typography>
+                                {props.live && <Timer date={props.start}/>} 
+
                         </Grid>
                         <Grid item xs={4}>
                                 <img src={props.guest_team.logo} style={{width:"50%"}} alt="Home team logo"/>
@@ -99,7 +143,7 @@ const MatchHeader = (props) => {
                         </Grid>
                         <Grid item xs={12} className={classes.infoText}>
                                 <Divider className={classes.divider}/>                          
-                                <Typography className={classes.infoText} > {props.date_time} </Typography>
+                                <Typography className={classes.infoText} > {new Intl.DateTimeFormat('en-UK', { dateStyle: 'short', timeStyle: 'short' }).format(propsDate)}</Typography>
                         </Grid>
                         <Grid item xs={12} >
                                 <Typography  className={classes.infoText} > {props.stadium} </Typography>  

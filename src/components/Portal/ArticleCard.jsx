@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardHeader, CardMedia, CardContent, CardActions, IconButton, Avatar, Typography, CardActionArea } from '@material-ui/core';
+import { Card, CardHeader, CardMedia, CardContent, CardActions, IconButton, Avatar, Typography, MenuItem, Menu, CardActionArea } from '@material-ui/core';
 import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import back from '../../images/backgroundLight.png';
@@ -106,8 +106,19 @@ const useStyles = makeStyles((theme) => ({
 const ArticleCard = (props) => {
 
     const classes = useStyles(); //DODAJ KLIK I LINK slike
+    const [ anchor, setAnchor] = useState(null);
+    const open = Boolean(anchor);
+
+    const shareMenuOpen = (event) => {
+      setAnchor(event.currentTarget);
+    };
+  
+    const shareMenuClose = () => {
+      setAnchor(null);
+    };
 
     return (
+      <Fragment>
         <Card className={classes.root}>
                 <CardMedia className={classes.media} image={ (props.match.photos.length>0)?`http://localhost:3001/photo/get/${props.match.photos[0].id}`:back} title="Match"/>
                 <div className={classes.textPart}>
@@ -128,16 +139,33 @@ const ArticleCard = (props) => {
                     </CardActionArea>
                         <CardActions className={classes.actions} disableSpacing>
                                 {window.innerWidth<=850 && <CardHeader avatar={ <Avatar aria-label="Author" className={classes.avatarSmall}> { props.match.user.username[0].toUpperCase()} </Avatar> } />}
-                                <IconButton aria-label="like">
+                                {/* <IconButton aria-label="like">
                                     <FavoriteIcon />
-                                </IconButton>
+                                </IconButton> */}
                                 <IconButton aria-label="share">
-                                    <ShareIcon />
+                                    <ShareIcon onClick={shareMenuOpen}/>
                                 </IconButton>
                                 {window.innerWidth>850 && <CardHeader avatar={ <Avatar aria-label="Author" className={classes.avatar}> { props.match.user.username[0].toUpperCase()} </Avatar> }  title={props.match.user.username} subheader={props.match.date_time}/>}
                         </CardActions>
                 </div>
         </Card>
+        <Menu
+            anchorEl={anchor} // html element koji je lokacija -> klikon na taj element se i otvara
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} // u odnosu na ANchorEl di ga displaya
+            // id={menuId}
+            keepMounted // uvik drži u DOM stablu ( i kad nije displayan) radi search engine optiizacije
+            transformOrigin={{ vertical: 'bottom', horizontal: 'left' }} // u odnosu na ANchorEl di ga displaya
+            open={open}
+            onClose={shareMenuClose}
+            >
+            <MenuItem onClick={shareMenuClose}>
+              <div class="fb-share-button" data-href="https://github.com/brunogrbavac/FootFeed" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+            </MenuItem>
+            <MenuItem onClick={shareMenuClose}>
+              <a href="https://twitter.com/intent/tweet?button_hashtag=tweet&ref_src=twsrc%5Etfw" class="twitter-hashtag-button" data-size="large" data-text="Check out FootFeed, its great!" data-url="https://github.com/brunogrbavac/FootFeed" data-related="brunogrbavac,FootFeed" data-lang="en" data-show-count="false">Tweet </a>             
+            </MenuItem>
+        </Menu>
+      </Fragment>
     );
 };
 

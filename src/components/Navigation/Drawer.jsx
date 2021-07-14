@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Drawer, List, ListItem, ListItemText, Divider, IconButton, Collapse } from '@material-ui/core';
 import { ChevronLeft, ExpandMore, ExpandLess } from '@material-ui/icons';
 import unknown from '../../images/unknown.png';
+import { Link } from 'react-router-dom';
 
 //----------------------------------------------------------------------------------- Funkcija koja HTTP zahtjrvom puni Drawer sa natjecanjima i ekipama
 
@@ -101,6 +102,13 @@ const DrawerMenu = (props) => {
         height:"auto",
         marginRight:"1rem",
       },
+      link:{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+      }
     }));
     
     let classes = useStyles();
@@ -126,7 +134,8 @@ const DrawerMenu = (props) => {
             <List>
                 {data.map( competition => (
                 <Fragment>
-                    <ListItem button onClick={() => handleExpandChange(data.indexOf(competition))}>
+                    <ListItem button >
+                    <Link className={classes.link} to={`/matches/competition/${competition.name}`}>
                         <div className={classes.competitionLogoBox}>
                             <img src={competition.logo!==null?competition.logo:unknown} className={classes.competitionLogo} alt={"Competition logo"}/>
                         </div>
@@ -134,7 +143,8 @@ const DrawerMenu = (props) => {
                             <img src={competition.country_flag!==null?competition.country_flag:unknown} className={classes.countryFlag} alt={"Country flag"}/>
                         </div>
                         <ListItemText primary={<span className={classes.competitionName}>{competition.name}</span>} />
-                        {open[data.indexOf(competition)] ? <ExpandLess /> : <ExpandMore />}
+                        </Link>
+                        {open[data.indexOf(competition)] ? <ExpandLess onClick={() => handleExpandChange(data.indexOf(competition))} /> : <ExpandMore onClick={() => handleExpandChange(data.indexOf(competition))} />}
                     </ListItem>
                   <Collapse in={open[data.indexOf(competition)]} timeout="auto" unmountOnExit>
                     {competition.teams.map (team =>(
@@ -142,8 +152,10 @@ const DrawerMenu = (props) => {
                           <Divider/>
                           <List component="div" disablePadding>
                             <ListItem button style={{paddingLeft:"3rem"}}>
+                              <Link className={classes.link} to={`/matches/team/${team.name}`}>
                               <img src={team.logo!==null?team.logo:unknown} className={classes.teamLogo} alt={"Team logo"}/>
                               <ListItemText primary={team.name} />
+                              </Link>
                             </ListItem>
                           </List>
                       </Fragment>

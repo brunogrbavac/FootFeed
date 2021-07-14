@@ -9,9 +9,10 @@ import logoIcon from '../../images/footfeedIcon.png';
 import { lightModeOn, darkModeOn } from '../../redux/actions/darkMode';
 import { userLogOut } from '../../redux/actions/login';
 import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'; // <--- import `withRouter`. We will use this in the bottom of our file.
 
 
-export default function Navbar(props) {
+const Navbar = (props) => {
   const dispatch = useDispatch();
   const darkMode = useSelector( (store) => store.darkMode );
   const login = useSelector( (store) => store.login );
@@ -152,10 +153,10 @@ export default function Navbar(props) {
                       <div className={classes.searchIcon}>
                           <Search/>
                       </div>
-                      <InputBase placeholder="Search…" aria-label='search' classes={{root: classes.inputRoot, input: classes.inputInput,}} />
+                      <InputBase placeholder="Search…" aria-label='search' onKeyUp={(e)=>{console.log("hej"); if(e.which === 13 ){window.location.assign("/matches/any/"+e.target.value);}}} classes={{root: classes.inputRoot, input: classes.inputInput,}} />
                   </div>
               </Tooltip>
-              {(login !== null) && 
+              {/* {(login !== null) && 
                   <Tooltip title="Your unseen notifications" arrow>
                     <IconButton aria-label="show 17 new notifications" color="inherit">
                         <Badge badgeContent={17} color="secondary">
@@ -163,7 +164,7 @@ export default function Navbar(props) {
                         </Badge>
                     </IconButton>
                   </Tooltip>
-              }
+              } */}
               {darkMode?
                   <Tooltip title="Light mode" arrow>
                       <IconButton color="inherit" onClick={()=>dispatch(lightModeOn())}> {/*NE ZABORAVI () od actiona*/}
@@ -189,13 +190,19 @@ export default function Navbar(props) {
                   </Button>
               }
               {(login === null) && 
+                  <Link to="/register">
+                        <Button edge="end" variant="contained" color="secondary" className={classes.logout}>
+                            REGISTER               
+                        </Button>
+                  </Link>
+              }
+              {(login === null) && 
                   <Link to="/login">
                         <Button edge="end" variant="contained" color="secondary" className={classes.logout}>
                             LOGIN               
                         </Button>
                   </Link>
               }
-
         </Toolbar>
       </AppBar>
       <Menu
@@ -212,4 +219,6 @@ export default function Navbar(props) {
       </Menu>
     </div>
   );
-}
+};
+
+export default withRouter(Navbar);

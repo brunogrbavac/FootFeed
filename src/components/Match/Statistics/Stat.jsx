@@ -34,7 +34,7 @@ const Stat = (props) => {
                         {props.home}
                     </Grid>
                     <Grid item xs={9}>
-                            <StatsBar value={(props.home/(props.home+props.guest))*100} left={true} />
+                            <StatsBar value={props.home===0?0:(props.home/(props.home+props.guest))*100} left={true} />
                     </Grid>
             </Grid>
             <Grid item container direction="row" justify="center" alignItems="center" xs={4} md={2}>
@@ -42,7 +42,7 @@ const Stat = (props) => {
             </Grid>
             <Grid item container direction="row" justify="center" alignItems="center" xs={4} md={5}>
                     <Grid item xs={9}>
-                            <StatsBar value={(props.guest/(props.home+props.guest))*100} />
+                            <StatsBar value={props.guest===0?0:(props.guest/(props.home+props.guest))*100} />
                     </Grid>                                    
                     <Grid item xs={3}>
                         {props.guest}

@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme) => ({
         boxSizing: "border-box",
     },
     paragraph: {
+        fontWeight:"400",
         textAlign: "justify",
         boxSizing: "border-box",
         padding:"1.2rem",
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1.25rem"
         }
     },
+    bold:{
+        fontWeight:"900",
+    }
 }));
 
 //----------------------------------------------------------------------------- Samo logo i tekst za home stranicu
@@ -43,9 +47,9 @@ const Banner = () => {
                 <img className={classes.image} src={footfeedDouble} alt='FootFeed'/>
             </Grid>
             <Grid item xs={11} md={7}>
-                <Typography className={classes.paragraph} variant="h6" color="textPrimary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Typography>
-            </Grid>
-        </Grid>
+                <Typography className={classes.paragraph} variant="h6" color="textPrimary"><strong className={classes.bold}>FootFeed</strong> is a place for any football fan. If you want to see the <strong className={classes.bold}>statistics</strong> of your teams last match, we got you. If you want to read an <strong>article</strong> about some game, we got you. You can do all that <strong className={classes.bold}>live</strong>, while the ball is still being kicked around. It all comes to your screen, no need for refreshing. FootFeed also lets you fullfill your dream of being a pundit, sign up with your email and <strong className={classes.bold}>cover  your favorite games</strong> by yourself.</Typography>
+        </Grid>        </Grid>
+
     </div>
   );
 };
