@@ -12,6 +12,11 @@ module.exports = class Photo{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                     request.files && // za single je file logično ali pazi
                     request.body.match_id
                 ){
+                    await this.Photo.destroy({
+                        where: {
+                            match_id: request.body.match_id,
+                        }
+                    });
                     for( let photo of request.files){
                         this.Logger.info(JSON.stringify({
                             uri: photo.path,

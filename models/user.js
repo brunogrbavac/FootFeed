@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init({
     user_id:{ // u Sequelize modelu također treba naznačiti PK, inače pri queryjanju odgovarajuće tablice baze preko Sequelize MODELA on za redak traži DEFAULT PK STUPAC "id" i javlja ERR:"column 'id' does not exist"
-      type:DataTypes.BIGINT,
-      primaryKey:true,
-      autoIncrement: true
+      type: DataTypes.BIGINT,
+      primaryKey: true,
+      autoIncrement:true
     },
     username: DataTypes.STRING,
     name: DataTypes.STRING,
@@ -25,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     photo: DataTypes.STRING,
   }, {
     sequelize,
-    modelName: 'User',
     timestamps: false, // ručno dodato jer ne želimo dodatne stupce
     createdAt: false, // -||-
     updatedAt: false, // -||-
+    modelName: 'User',
     freezeTableName: true, // -||-
   });
 

@@ -119,10 +119,6 @@ async editMatch(request){
                 article: request.body.article,
                 headline: request.body.headline,
                 stadium: request.body.stadium,
-                home_team: request.body.home_team,
-                guest_team: request.body.guest_team,
-                user: request.session.user,
-                competition: request.body.competition,
             },{where:{match_id: request.body.match_id}});
             return 200;
         }
@@ -171,6 +167,7 @@ async editMatch(request){
                         match_id: matchId,
                         players: players,
                         article: events[i].article,
+                        home_team: events[i].home_team,
                     });
                     this.Logger.info('Players of event '+ events[i].event_id+' succesfully loaded. In total '+ players.length+' players.');
                 }
@@ -195,13 +192,5 @@ async editMatch(request){
         }
     };
 
-    async goLiveHalf( match_id ){
-        try{
-            await this.Match.update({start: new Date() },{where:{match_id:match_id}});
-        }
-        catch(error){
-            this.Logger.error('Error in function ˝goLiveMatch˝ (service). ' + error);
-            throw(error);    
-        }
-    };
+
 };
