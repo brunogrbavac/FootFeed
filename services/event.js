@@ -11,7 +11,6 @@ module.exports = class Event{ // ne exportamo OBJEKT kao inače već ES6 klasu z
 
     async createEvent(message) // message objekt s podacima za unos
     {
-        console.log(message);
         try {
             let matchExists = await this.Match.findOne({where: {match_id: message.match_id}});
 
@@ -46,8 +45,16 @@ module.exports = class Event{ // ne exportamo OBJEKT kao inače već ES6 klasu z
                     });
                 };
 
+
+
                 let players = await new_event.getEvents_player();
                 let ret = players.map(player=>player.dataValues);
+                
+                let playersOfEvent = await this.Player_Event.findAll({where: {event_id: new_event.event_id}});
+                if(playersOfEvent[0]!==undefined){
+                    let firstPlayer = playersOfEvent[0].order===1?playersOfEvent[0]:playersOfEvent[1];
+                    if(firstPlayer.AF_ID_player!==ret[0].AF_ID_player){ ret = ret.reverse()};
+                };
 
                 this.Logger.info('Event '+message.type+'|' +message.time+'|' +' added succesfully to the match with ID: '+message.match_id+'. (With players that participated.)');
                 return {...new_event.dataValues, players: ret, start: start, live:live, result: message.result};

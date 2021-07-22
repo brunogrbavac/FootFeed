@@ -1,6 +1,6 @@
 module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu za rad sa Sequelize MODELIMA
     
-    constructor(match,team,event,photo,user,competition,logger){
+    constructor(match,team,event,photo,user,competition,player_event,logger){
         this.Match = match;
         this.Team = team;
         this.Logger = logger;
@@ -8,6 +8,8 @@ module.exports = class Match{ // ne exportamo OBJEKT kao inače već ES6 klasu z
         this.Photo = photo;
         this.User = user;
         this.Competition = competition;
+        this.Player_Event = player_event;
+
     };
 //-------------------------------------------------------------------------------------------------------------------------------------- funkcija stvaranja susreta
 
@@ -159,7 +161,15 @@ async editMatch(request){
                 this.Logger.info('Events of match succesfully queried. '+ events.length + ' events total for match ID: '+ matchId +'.');
 
                 for(let i=0; i<events.length; i++){
+    
                     let players = await events[i].getEvents_player();
+
+                    let playersOfEvent = await this.Player_Event.findAll({where: {event_id: events[i].event_id}});
+                    if(playersOfEvent[0]!==undefined){
+                        let firstPlayer = playersOfEvent[0].order===1?playersOfEvent[0]:playersOfEvent[1];
+                        if(firstPlayer.AF_ID_player!==players[0].AF_ID_player){ players = players.reverse()};
+                    };
+
                     eventsForResponse.push({
                         event_id: events[i].event_id,
                         type: events[i].type,

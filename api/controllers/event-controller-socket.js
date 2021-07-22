@@ -7,13 +7,13 @@ module.exports = {
         try{
             let event = await event_instance.createEvent(msg); 
             let code;
-            if(event.type==="Goal"){ code = '/event/Goal' }
+            if(event.type.includes("Goal")){ code = '/event/Goal' }
             else if(event.type==="Halftime"){ code = '/event/Halftime' }
             else if(event.type==="Second half"){ code = '/event/Secondhalf' }
             else if(event.type==="End"){ code = '/event/End'}
             else { code = '/event/regular'};
 
-            console.log(code+' '+event);
+            nodeLogger.info(code+' '+event);
             io.to(room).emit(`${code}`,event);
         }catch(error){
             nodeLogger.error('Error occured in ˝createEvent˝  HTTP function (controller) ' + error);
